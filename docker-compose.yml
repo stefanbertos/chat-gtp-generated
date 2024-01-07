@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  solace:
+    image: solace/solace-pubsub-standard
+    environment:
+      - username_admin_globalaccesslevel=admin
+      - username_admin_password=admin
+      - system_scaling_maxconnectioncount=100
+    ports:
+      - "8080:8080"  # Web transport
+      - "55555:55555"  # SMF
+      - "55556:55556"  # SMF over TLS
+      - "55003:55003"  # AMQP
+      - "1883:1883"  # MQTT
+      - "5672:5672"  # AMQP over TLS
+      - "61613:61613"  # WebSockets
+      - "61614:61614"  # WebSockets over TLS
+
+  mongo1:
+    image: mongo:latest
+    container_name: mongo1
+    command: mongod --replSet rs0 --sslMode requireSSL --sslPEMKeyFile /ssl/server.pem --sslCAFile /ssl/ca.pem --sslCRLFile /ssl/ca.crl --sslAllowInvalidHostnames
+    volumes:
+      - ./mongo1_data:/data/db
+      - ./ssl:/ssl
+    ports:
+      - "27017:27017"
+
+  mongo2:
+    image: mongo:latest
+    container_name: mongo2
+    command: mongod --replSet rs0 --sslMode requireSSL --sslPEMKeyFile /ssl/server.pem --sslCAFile /ssl/ca.pem --sslCRLFile /ssl/ca.crl --sslAllowInvalidHostnames
+    volumes:
+      - ./mongo2_data:/data/db
+      - ./ssl:/ssl
+
+networks:
+  default:
+    name: mongo-net

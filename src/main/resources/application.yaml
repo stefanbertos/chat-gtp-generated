@@ -1,0 +1,20 @@
+solace:
+  java:
+    host: your-solace-host
+    msgVpn: your-solace-msgVpn
+    clientUsername: your-solace-username
+    clientPassword: your-solace-password
+    clientName: your-solace-client
+    connectRetries: 3
+    reconnectRetries: 3
+    connectRetriesPerHost: 3
+    reconnectRetryWaitInMillis: 3000
+  queue:
+    name: your-solace-queue
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://your_user:your_password@localhost:27017,localhost:27018,localhost:27019/your_database?replicaSet=rs0
+
+
